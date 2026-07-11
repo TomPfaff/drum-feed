@@ -78,11 +78,14 @@
   .tile .overlay .d { font-size: 11px; color: #d0d0d6; text-align: left; }
   .tile-dots {
     position: absolute; top: 8px; left: 8px;
-    display: flex; gap: 4px; align-items: center;
+    display: flex; gap: 5px; align-items: center;
     pointer-events: none;
   }
-  .tile-dots .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .tile-dots .heart { color: var(--accent); font-size: 12px; line-height: 1; text-shadow: 0 0 4px rgba(0,0,0,0.8); }
+  .tile-dots .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.5);
+  }
+  .tile-dots .heart { color: var(--accent); font-size: 15px; line-height: 1; text-shadow: 0 0 5px rgba(0,0,0,0.9); }
 
   .tile.playing::after {
     content: "";
@@ -170,6 +173,33 @@
     position: absolute; top: 14px; right: 18px;
     background: none; border: 0; color: #fff;
     font-size: 30px; line-height: 1; cursor: pointer;
+  }
+
+  /* filter bar */
+  #filter {
+    max-width: 935px;
+    margin: 12px auto 2px;
+    padding: 0 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  #f-search {
+    flex: 1; min-width: 120px;
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--line); border-radius: 18px;
+    padding: 8px 14px; font-size: 13.5px;
+    outline: none;
+  }
+  #f-search:focus { border-color: var(--accent); }
+  #f-like {
+    background: none; border: 0; cursor: pointer;
+    font-size: 20px; line-height: 1;
+    color: #3a3a42;
+  }
+  #f-like.on { color: var(--accent); }
+  .f-tags { display: flex; gap: 8px; }
+  #no-match {
+    text-align: center; color: var(--muted);
+    padding: 40px 20px; font-size: 14px;
   }
 
   /* like + color tags */
@@ -291,7 +321,19 @@
   <div id="cal-wrap"><div id="cal"></div></div>
 </section>
 
+<div id="filter" hidden>
+  <input id="f-search" type="search" placeholder="Artist oder Song suchen..." autocomplete="off">
+  <button id="f-like" title="Nur Likes zeigen">&#9829;</button>
+  <div class="f-tags">
+    <button class="tag" data-tag="red"    style="--tag-color:#e5484d" title="Nur rot"></button>
+    <button class="tag" data-tag="yellow" style="--tag-color:#f5d90a" title="Nur gelb"></button>
+    <button class="tag" data-tag="green"  style="--tag-color:#46a758" title="Nur grün"></button>
+    <button class="tag" data-tag="blue"   style="--tag-color:#3e63dd" title="Nur blau"></button>
+  </div>
+</div>
+
 <div id="grid"></div>
+<div id="no-match" hidden>Keine Treffer — Filter anpassen.</div>
 <div id="empty" hidden>Noch keine Sessions — publish_website.py starten!</div>
 
 <div id="detail">
@@ -450,7 +492,7 @@ function setReaction(id, patch) {
   state.reactionsLocal[id] = { ...reactionsFor(id), ...patch };
   localStorage.setItem("df_reactions", JSON.stringify(state.reactionsLocal));
   renderReactions();
-  if (state.tiles[id]) renderTileDots(state.tiles[id], id);
+  applyFilter();  // refreshes tile dots and any active like/tag filter
   if (ghConfig()) pushJsonToGitHub("reactions.json", mergedReactions());
   else $("sync-note").textContent = "Nur auf diesem Geraet gespeichert - Sync via ⚙ einrichten.";
 }
@@ -646,20 +688,14 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && detail.classList.contains("open")) closeDetail();
 });
 
-// ---------- load feed ----------
-Promise.all([
-  fetch("sessions.json?" + Date.now()).then(r => r.json()),
-  fetch("comments.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-  fetch("reactions.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-]).then(([sessions, published, reactionsPub]) => {
-  state.sessions = sessions;
-  state.published = published;
-  state.reactionsPub = reactionsPub;
-  sessions.sort((a, b) => b.date.localeCompare(a.date));
-  $("count").textContent = sessions.length ? `${sessions.length} Sessions` : "";
-  if (!sessions.length) { $("empty").hidden = false; return; }
-  renderStats(sessions);
-  for (const session of sessions) {
+// ---------- grid + filter ----------
+const filter = { q: "", tags: [], liked: false };
+
+function renderGrid(list) {
+  grid.innerHTML = "";
+  state.tiles = {};
+  $("no-match").hidden = list.length > 0;
+  for (const session of list) {
     const tile = document.createElement("button");
     tile.className = "tile";
     tile.innerHTML = `
@@ -672,10 +708,63 @@ Promise.all([
     tile.querySelector(".d").textContent =
       (session.artist ? session.artist + " · " : "") + fmtDate(session.date);
     tile.addEventListener("click", () => openDetail(session, tile));
+    if (state.current && session.id === state.current.id) tile.classList.add("playing");
     state.tiles[session.id] = tile;
     renderTileDots(tile, session.id);
     grid.appendChild(tile);
   }
+}
+
+function applyFilter() {
+  const query = filter.q.toLowerCase();
+  const filtered = state.sessions.filter(session => {
+    const haystack = `${session.artist || ""} ${session.song || ""} ${session.title || ""}`.toLowerCase();
+    if (query && !haystack.includes(query)) return false;
+    const r = reactionsFor(session.id);
+    if (filter.liked && !r.liked) return false;
+    if (filter.tags.length && !filter.tags.some(tag => r.tags.includes(tag))) return false;
+    return true;
+  });
+  renderGrid(filtered);
+  $("count").textContent = filtered.length === state.sessions.length
+    ? `${state.sessions.length} Sessions`
+    : `${filtered.length} von ${state.sessions.length} Sessions`;
+}
+
+$("f-search").addEventListener("input", (e) => {
+  filter.q = e.target.value.trim();
+  applyFilter();
+});
+$("f-like").addEventListener("click", () => {
+  filter.liked = !filter.liked;
+  $("f-like").classList.toggle("on", filter.liked);
+  applyFilter();
+});
+document.querySelectorAll("#filter .f-tags .tag").forEach(button => {
+  button.addEventListener("click", () => {
+    const tag = button.dataset.tag;
+    filter.tags = filter.tags.includes(tag)
+      ? filter.tags.filter(t => t !== tag)
+      : [...filter.tags, tag];
+    button.classList.toggle("on", filter.tags.includes(tag));
+    applyFilter();
+  });
+});
+
+// ---------- load feed ----------
+Promise.all([
+  fetch("sessions.json?" + Date.now()).then(r => r.json()),
+  fetch("comments.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+  fetch("reactions.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+]).then(([sessions, published, reactionsPub]) => {
+  state.sessions = sessions;
+  state.published = published;
+  state.reactionsPub = reactionsPub;
+  sessions.sort((a, b) => b.date.localeCompare(a.date));
+  if (!sessions.length) { $("empty").hidden = false; return; }
+  renderStats(sessions);
+  $("filter").hidden = false;
+  applyFilter();
 }).catch(() => { $("empty").hidden = false; });
 </script>
 </body>
