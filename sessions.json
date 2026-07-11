@@ -1,0 +1,23 @@
+[
+  {
+    "id": "demo-back-in-black",
+    "title": "Demo - Back in Black",
+    "date": "2026-07-11",
+    "audio": "audio/demo-back-in-black.mp3",
+    "picture": "pictures/demo-back-in-black.jpg"
+  },
+  {
+    "id": "demo-smells-like",
+    "title": "Demo - Smells Like Teen Spirit",
+    "date": "2026-07-09",
+    "audio": "audio/demo-smells-like.mp3",
+    "picture": "pictures/demo-smells-like.jpg"
+  },
+  {
+    "id": "demo-uptown-funk",
+    "title": "Demo - Uptown Funk",
+    "date": "2026-07-05",
+    "audio": "audio/demo-uptown-funk.mp3",
+    "picture": "pictures/demo-uptown-funk.jpg"
+  }
+]
