@@ -89,6 +89,47 @@
     padding: 80px 20px; font-size: 15px;
   }
 
+  /* stats + calendar */
+  #stats {
+    max-width: 935px;
+    margin: 16px auto 6px;
+    padding: 0 12px;
+  }
+  .stat-row { display: flex; gap: 26px; flex-wrap: wrap; align-items: flex-end; }
+  .stat b { font-size: 17px; font-weight: 700; }
+  .stat span { display: block; color: var(--muted); font-size: 11.5px; margin-top: 1px; }
+  #s-bar {
+    height: 4px; border-radius: 2px;
+    background: var(--line);
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  #s-bar-fill {
+    height: 100%; width: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  #cal-wrap {
+    margin-top: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+  #cal { display: flex; gap: 3px; width: max-content; }
+  .cal-col { display: flex; flex-direction: column; gap: 3px; }
+  .cal-mon {
+    height: 12px; font-size: 9px; color: var(--muted);
+    white-space: nowrap; overflow: visible;
+  }
+  .cal-cell {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    background: #1e1e24;
+  }
+  .cal-cell.l1 { background: color-mix(in srgb, var(--accent) 35%, #1a1a1f); }
+  .cal-cell.l2 { background: color-mix(in srgb, var(--accent) 65%, #1a1a1f); }
+  .cal-cell.l3 { background: var(--accent); }
+
   /* detail view */
   #detail {
     position: fixed; inset: 0; z-index: 10;
@@ -203,6 +244,17 @@
   <span class="count" id="count"></span>
   <button class="gear" id="gear" title="Kommentar-Sync einrichten (GitHub)">&#9881;</button>
 </header>
+
+<section id="stats" hidden>
+  <div class="stat-row">
+    <div class="stat"><b id="s-count"></b><span>Sessions</span></div>
+    <div class="stat"><b id="s-time"></b><span>Spielzeit</span></div>
+    <div class="stat"><b id="s-used"></b><span>belegt</span></div>
+    <div class="stat"><b id="s-free"></b><span>frei von 1 GB</span></div>
+  </div>
+  <div id="s-bar"><div id="s-bar-fill"></div></div>
+  <div id="cal-wrap"><div id="cal"></div></div>
+</section>
 
 <div id="grid"></div>
 <div id="empty" hidden>Noch keine Sessions — publish_website.py starten!</div>
@@ -375,6 +427,74 @@ audio.addEventListener("timeupdate", () => {
 });
 audio.addEventListener("loadedmetadata", renderMarkers);
 
+// ---------- stats + calendar ----------
+function fmtHours(totalSeconds) {
+  const h = Math.floor(totalSeconds / 3600), m = Math.round((totalSeconds % 3600) / 60);
+  return h ? `${h} Std ${m} Min` : `${m} Min`;
+}
+function fmtSize(bytes) {
+  const mb = bytes / 1048576;
+  if (mb < 1) return (bytes / 1024).toFixed(0) + " KB";
+  if (mb < 1024) return mb.toFixed(1) + " MB";
+  return (mb / 1024).toFixed(2) + " GB";
+}
+
+function renderStats(sessions) {
+  $("stats").hidden = false;
+  const LIMIT = 1024 * 1048576;  // GitHub Pages: 1 GB
+  const totalSize = sessions.reduce((a, s) => a + (s.size || 0), 0);
+  const totalDur = sessions.reduce((a, s) => a + (s.duration || 0), 0);
+  $("s-count").textContent = sessions.length;
+  $("s-time").textContent = fmtHours(totalDur);
+  $("s-used").textContent = fmtSize(totalSize);
+  $("s-free").textContent = fmtSize(LIMIT - totalSize);
+  $("s-bar-fill").style.width = Math.max(0.4, totalSize / LIMIT * 100) + "%";
+  renderCalendar(sessions);
+}
+
+// GitHub-style contribution heatmap: 52 weeks, columns = weeks, rows = Mon-Sun
+function renderCalendar(sessions) {
+  const counts = {};
+  sessions.forEach(s => { counts[s.date] = (counts[s.date] || 0) + 1; });
+  const cal = $("cal");
+  cal.innerHTML = "";
+  const months = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const start = new Date(today);
+  start.setDate(start.getDate() - 364);
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7));  // back to Monday
+  let prevMonth = -1;
+  for (const week = new Date(start); week <= today; week.setDate(week.getDate() + 7)) {
+    const col = document.createElement("div");
+    col.className = "cal-col";
+    const label = document.createElement("div");
+    label.className = "cal-mon";
+    if (week.getMonth() !== prevMonth) {
+      label.textContent = months[week.getMonth()];
+      prevMonth = week.getMonth();
+    }
+    col.appendChild(label);
+    for (let d = 0; d < 7; d++) {
+      const dt = new Date(week);
+      dt.setDate(week.getDate() + d);
+      const cell = document.createElement("div");
+      cell.className = "cal-cell";
+      if (dt <= today) {
+        const iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+        const n = counts[iso] || 0;
+        if (n) cell.classList.add("l" + Math.min(n, 3));
+        cell.title = `${fmtDate(iso)}: ${n} Session${n === 1 ? "" : "s"}`;
+      } else {
+        cell.style.visibility = "hidden";
+      }
+      col.appendChild(cell);
+    }
+    cal.appendChild(col);
+  }
+  const wrap = $("cal-wrap");
+  wrap.scrollLeft = wrap.scrollWidth;  // most recent weeks in view
+}
+
 // ---------- detail view ----------
 function openDetail(session, tile) {
   state.current = session;
@@ -416,6 +536,7 @@ Promise.all([
   sessions.sort((a, b) => b.date.localeCompare(a.date));
   $("count").textContent = sessions.length ? `${sessions.length} Sessions` : "";
   if (!sessions.length) { $("empty").hidden = false; return; }
+  renderStats(sessions);
   for (const session of sessions) {
     const tile = document.createElement("button");
     tile.className = "tile";

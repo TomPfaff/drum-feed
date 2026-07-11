@@ -4,41 +4,53 @@
     "title": "Free Nationals, Mac Miller & Kali Uchis - Time [12]",
     "date": "2026-07-11",
     "audio": "audio/free-nationals-mac-miller-kali-uchis---time-12.mp3",
-    "picture": "pictures/free-nationals-mac-miller-kali-uchis---time-12.png"
+    "picture": "pictures/free-nationals-mac-miller-kali-uchis---time-12.png",
+    "duration": 152.5,
+    "size": 4133908
   },
   {
     "id": "logic---man-i-is-01",
     "title": "Logic - man i is [01]",
     "date": "2026-07-11",
     "audio": "audio/logic---man-i-is-01.mp3",
-    "picture": "pictures/logic---man-i-is-01.png"
+    "picture": "pictures/logic---man-i-is-01.png",
+    "duration": 180.9,
+    "size": 5488176
   },
   {
     "id": "mac-miller---objects-in-the-mirror-09",
     "title": "Mac Miller - Objects in the Mirror [09]",
     "date": "2026-07-11",
     "audio": "audio/mac-miller---objects-in-the-mirror-09.mp3",
-    "picture": "pictures/mac-miller---objects-in-the-mirror-09.png"
+    "picture": "pictures/mac-miller---objects-in-the-mirror-09.png",
+    "duration": 225.0,
+    "size": 5746065
   },
   {
     "id": "demo-back-in-black",
     "title": "Demo - Back in Black",
     "date": "2026-07-11",
     "audio": "audio/demo-back-in-black.mp3",
-    "picture": "pictures/demo-back-in-black.jpg"
+    "picture": "pictures/demo-back-in-black.jpg",
+    "duration": 4.0,
+    "size": 135951
   },
   {
     "id": "demo-smells-like",
     "title": "Demo - Smells Like Teen Spirit",
     "date": "2026-07-09",
     "audio": "audio/demo-smells-like.mp3",
-    "picture": "pictures/demo-smells-like.jpg"
+    "picture": "pictures/demo-smells-like.jpg",
+    "duration": 4.0,
+    "size": 136363
   },
   {
     "id": "demo-uptown-funk",
     "title": "Demo - Uptown Funk",
     "date": "2026-07-05",
     "audio": "audio/demo-uptown-funk.mp3",
-    "picture": "pictures/demo-uptown-funk.jpg"
+    "picture": "pictures/demo-uptown-funk.jpg",
+    "duration": 4.0,
+    "size": 140904
   }
 ]
