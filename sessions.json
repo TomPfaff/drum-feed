@@ -1,5 +1,16 @@
 [
   {
+    "id": "logic---man-i-is-10",
+    "title": "Logic - man i is [10]",
+    "artist": "Logic",
+    "song": "man i is",
+    "date": "2026-07-11",
+    "audio": "audio/logic---man-i-is-10.mp3",
+    "picture": "pictures/logic---man-i-is-10.png",
+    "duration": 18.6,
+    "size": 1435557
+  },
+  {
     "id": "francis-and-the-lights---friends-feat-bon-iver-11",
     "title": "Francis and the Lights - Friends (feat. Bon Iver) [11]",
     "artist": "Francis and the Lights",
