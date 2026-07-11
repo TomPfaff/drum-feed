@@ -6,7 +6,9 @@
     "audio": "audio/owl-city---fireflies-05.mp3",
     "picture": "pictures/owl-city---fireflies-05.png",
     "duration": 204.7,
-    "size": 5861829
+    "size": 5861870,
+    "artist": "Owl City",
+    "song": "Fireflies"
   },
   {
     "id": "mac-miller---woods-07",
@@ -15,7 +17,9 @@
     "audio": "audio/mac-miller---woods-07.mp3",
     "picture": "pictures/mac-miller---woods-07.png",
     "duration": 275.0,
-    "size": 7067740
+    "size": 7067779,
+    "artist": "Mac Miller",
+    "song": "Woods"
   },
   {
     "id": "free-nationals-mac-miller-kali-uchis---time-12",
@@ -24,7 +28,9 @@
     "audio": "audio/free-nationals-mac-miller-kali-uchis---time-12.mp3",
     "picture": "pictures/free-nationals-mac-miller-kali-uchis---time-12.png",
     "duration": 152.5,
-    "size": 4133908
+    "size": 4133975,
+    "artist": "Free Nationals, Mac Miller & Kali Uchis",
+    "song": "Time"
   },
   {
     "id": "logic---man-i-is-01",
@@ -33,7 +39,9 @@
     "audio": "audio/logic---man-i-is-01.mp3",
     "picture": "pictures/logic---man-i-is-01.png",
     "duration": 180.9,
-    "size": 5488176
+    "size": 5488213,
+    "artist": "Logic",
+    "song": "man i is"
   },
   {
     "id": "mac-miller---objects-in-the-mirror-09",
@@ -42,7 +50,9 @@
     "audio": "audio/mac-miller---objects-in-the-mirror-09.mp3",
     "picture": "pictures/mac-miller---objects-in-the-mirror-09.png",
     "duration": 225.0,
-    "size": 5746065
+    "size": 5746120,
+    "artist": "Mac Miller",
+    "song": "Objects in the Mirror"
   },
   {
     "id": "demo-smells-like",
@@ -51,7 +61,9 @@
     "audio": "audio/demo-smells-like.mp3",
     "picture": "pictures/demo-smells-like.jpg",
     "duration": 4.0,
-    "size": 136363
+    "size": 136414,
+    "artist": "Demo",
+    "song": "Smells Like Teen Spirit"
   },
   {
     "id": "demo-uptown-funk",
@@ -60,6 +72,8 @@
     "audio": "audio/demo-uptown-funk.mp3",
     "picture": "pictures/demo-uptown-funk.jpg",
     "duration": 4.0,
-    "size": 140904
+    "size": 140943,
+    "artist": "Demo",
+    "song": "Uptown Funk"
   }
 ]

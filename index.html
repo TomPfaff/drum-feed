@@ -76,6 +76,14 @@
   .tile:hover .overlay, .tile:focus .overlay { opacity: 1; }
   .tile .overlay .t { font-size: 13px; font-weight: 600; text-align: left; }
   .tile .overlay .d { font-size: 11px; color: #d0d0d6; text-align: left; }
+  .tile-dots {
+    position: absolute; top: 8px; left: 8px;
+    display: flex; gap: 4px; align-items: center;
+    pointer-events: none;
+  }
+  .tile-dots .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .tile-dots .heart { color: var(--accent); font-size: 12px; line-height: 1; text-shadow: 0 0 4px rgba(0,0,0,0.8); }
+
   .tile.playing::after {
     content: "";
     position: absolute; top: 8px; right: 8px;
@@ -163,6 +171,33 @@
     background: none; border: 0; color: #fff;
     font-size: 30px; line-height: 1; cursor: pointer;
   }
+
+  /* like + color tags */
+  #react-row {
+    display: flex; align-items: center; gap: 14px;
+    margin: 2px 0 12px;
+  }
+  #r-like {
+    background: none; border: 0; cursor: pointer;
+    font-size: 22px; line-height: 1;
+    color: #3a3a42;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  #r-like.on { color: var(--accent); }
+  #r-like:active { transform: scale(1.25); }
+  #r-tags { display: flex; gap: 8px; }
+  .tag {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--tag-color);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, background 0.15s ease;
+  }
+  .tag.on { background: var(--tag-color); opacity: 1; }
+  .tag:hover { opacity: 1; }
 
   /* SoundCloud-style comment timeline */
   #timeline {
@@ -266,6 +301,15 @@
     <div class="info">
       <h2 id="d-title"></h2>
       <div class="date" id="d-date"></div>
+      <div id="react-row">
+        <button id="r-like" title="Gefällt mir">&#9829;</button>
+        <div id="r-tags">
+          <button class="tag" data-tag="red"    style="--tag-color:#e5484d" title="Tag: rot"></button>
+          <button class="tag" data-tag="yellow" style="--tag-color:#f5d90a" title="Tag: gelb"></button>
+          <button class="tag" data-tag="green"  style="--tag-color:#46a758" title="Tag: grün"></button>
+          <button class="tag" data-tag="blue"   style="--tag-color:#3e63dd" title="Tag: blau"></button>
+        </div>
+      </div>
       <div id="timeline"><div id="tl-played"></div></div>
       <audio id="d-audio" controls preload="metadata"></audio>
       <div id="c-list"></div>
@@ -290,6 +334,9 @@ const state = {
   sessions: [],
   published: {},                                                    // from comments.json
   local: JSON.parse(localStorage.getItem("df_comments") || "{}"),   // written on this device
+  reactionsPub: {},                                                 // from reactions.json
+  reactionsLocal: JSON.parse(localStorage.getItem("df_reactions") || "{}"),
+  tiles: {},                                                        // session id -> tile element
   current: null,                                                    // session shown in detail
 };
 
@@ -315,25 +362,25 @@ function fmtTime(s) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
-// ---------- comment sync (GitHub Contents API) ----------
-async function pushToGitHub() {
+// ---------- sync (GitHub Contents API, used for comments + reactions) ----------
+async function pushJsonToGitHub(filename, data) {
   const cfg = ghConfig();
   if (!cfg) return;
   $("sync-note").textContent = "Synchronisiere...";
   try {
-    const api = `https://api.github.com/repos/${cfg.repo}/contents/comments.json`;
+    const api = `https://api.github.com/repos/${cfg.repo}/contents/${filename}`;
     const headers = { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" };
     const existing = await fetch(api, { headers, cache: "no-store" });
     const sha = existing.ok ? (await existing.json()).sha : undefined;
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(allMerged(), null, 2) + "\n")));
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + "\n")));
     const put = await fetch(api, {
       method: "PUT", headers,
-      body: JSON.stringify({ message: "drum.feed: comment", content, sha }),
+      body: JSON.stringify({ message: "drum.feed: " + filename.replace(".json", ""), content, sha }),
     });
     if (!put.ok) throw new Error((await put.json()).message || put.status);
-    $("sync-note").textContent = "Kommentar gespeichert (GitHub).";
+    $("sync-note").textContent = "Gespeichert (GitHub).";
   } catch (err) {
-    $("sync-note").textContent = "Sync fehlgeschlagen: " + err.message + " — Kommentar ist lokal gespeichert.";
+    $("sync-note").textContent = "Sync fehlgeschlagen: " + err.message + " — lokal gespeichert.";
   }
 }
 
@@ -350,6 +397,78 @@ $("gear").addEventListener("click", () => {
     localStorage.removeItem("df_github");
     alert("Sync entfernt - Kommentare bleiben nur auf diesem Geraet.");
   }
+});
+
+// ---------- likes + color tags ----------
+const TAG_COLORS = { red: "#e5484d", yellow: "#f5d90a", green: "#46a758", blue: "#3e63dd" };
+
+function reactionsFor(id) {
+  // local (this device) overrides published (repo) per session
+  return { liked: false, tags: [], ...(state.reactionsPub[id] || {}), ...(state.reactionsLocal[id] || {}) };
+}
+
+function mergedReactions() {
+  const merged = {};
+  const ids = new Set([...Object.keys(state.reactionsPub), ...Object.keys(state.reactionsLocal)]);
+  for (const id of ids) {
+    const r = reactionsFor(id);
+    if (r.liked || r.tags.length) merged[id] = r;
+  }
+  return merged;
+}
+
+function renderReactions() {
+  if (!state.current) return;
+  const r = reactionsFor(state.current.id);
+  $("r-like").classList.toggle("on", !!r.liked);
+  document.querySelectorAll("#r-tags .tag").forEach(button =>
+    button.classList.toggle("on", r.tags.includes(button.dataset.tag)));
+}
+
+function renderTileDots(tile, id) {
+  tile.querySelector(".tile-dots")?.remove();
+  const r = reactionsFor(id);
+  if (!r.liked && !r.tags.length) return;
+  const dots = document.createElement("div");
+  dots.className = "tile-dots";
+  if (r.liked) {
+    const heart = document.createElement("span");
+    heart.className = "heart";
+    heart.textContent = "♥";
+    dots.appendChild(heart);
+  }
+  for (const tag of r.tags) {
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    dot.style.background = TAG_COLORS[tag];
+    dots.appendChild(dot);
+  }
+  tile.appendChild(dots);
+}
+
+function setReaction(id, patch) {
+  state.reactionsLocal[id] = { ...reactionsFor(id), ...patch };
+  localStorage.setItem("df_reactions", JSON.stringify(state.reactionsLocal));
+  renderReactions();
+  if (state.tiles[id]) renderTileDots(state.tiles[id], id);
+  if (ghConfig()) pushJsonToGitHub("reactions.json", mergedReactions());
+  else $("sync-note").textContent = "Nur auf diesem Geraet gespeichert - Sync via ⚙ einrichten.";
+}
+
+$("r-like").addEventListener("click", () => {
+  if (!state.current) return;
+  setReaction(state.current.id, { liked: !reactionsFor(state.current.id).liked });
+});
+
+document.querySelectorAll("#r-tags .tag").forEach(button => {
+  button.addEventListener("click", () => {
+    if (!state.current) return;
+    const tags = reactionsFor(state.current.id).tags;
+    const tag = button.dataset.tag;
+    setReaction(state.current.id, {
+      tags: tags.includes(tag) ? tags.filter(t => t !== tag) : [...tags, tag],
+    });
+  });
 });
 
 // ---------- comment UI ----------
@@ -385,7 +504,7 @@ function renderComments() {
       state.local[id] = (state.local[id] || []).filter(x => x.id !== c.id);
       localStorage.setItem("df_comments", JSON.stringify(state.local));
       renderComments(); renderMarkers();
-      pushToGitHub();
+      pushJsonToGitHub("comments.json", allMerged());
     });
     list.appendChild(row);
   }
@@ -405,7 +524,7 @@ $("c-form").addEventListener("submit", (e) => {
   localStorage.setItem("df_comments", JSON.stringify(state.local));
   $("c-input").value = "";
   renderComments(); renderMarkers();
-  if (ghConfig()) pushToGitHub();
+  if (ghConfig()) pushJsonToGitHub("comments.json", allMerged());
   else $("sync-note").textContent = "Nur auf diesem Geraet gespeichert - Sync via ⚙ einrichten.";
 });
 
@@ -499,8 +618,9 @@ function renderCalendar(sessions) {
 function openDetail(session, tile) {
   state.current = session;
   $("d-pic").src = session.picture;
-  $("d-title").textContent = session.title;
-  $("d-date").textContent = fmtDate(session.date);
+  $("d-title").textContent = session.song || session.title;
+  $("d-date").textContent = (session.artist ? session.artist + " · " : "") + fmtDate(session.date);
+  renderReactions();
   $("tl-played").style.width = "0%";
   $("c-at").textContent = "0:00";
   $("sync-note").textContent = ghConfig() ? "" : "Kommentare: nur dieses Geraet (Sync via ⚙).";
@@ -530,9 +650,11 @@ document.addEventListener("keydown", (e) => {
 Promise.all([
   fetch("sessions.json?" + Date.now()).then(r => r.json()),
   fetch("comments.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-]).then(([sessions, published]) => {
+  fetch("reactions.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+]).then(([sessions, published, reactionsPub]) => {
   state.sessions = sessions;
   state.published = published;
+  state.reactionsPub = reactionsPub;
   sessions.sort((a, b) => b.date.localeCompare(a.date));
   $("count").textContent = sessions.length ? `${sessions.length} Sessions` : "";
   if (!sessions.length) { $("empty").hidden = false; return; }
@@ -546,9 +668,12 @@ Promise.all([
         <div class="t"></div>
         <div class="d"></div>
       </div>`;
-    tile.querySelector(".t").textContent = session.title;
-    tile.querySelector(".d").textContent = fmtDate(session.date);
+    tile.querySelector(".t").textContent = session.song || session.title;
+    tile.querySelector(".d").textContent =
+      (session.artist ? session.artist + " · " : "") + fmtDate(session.date);
     tile.addEventListener("click", () => openDetail(session, tile));
+    state.tiles[session.id] = tile;
+    renderTileDots(tile, session.id);
     grid.appendChild(tile);
   }
 }).catch(() => { $("empty").hidden = false; });
