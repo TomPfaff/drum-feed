@@ -1,5 +1,17 @@
 [
   {
+    "id": "nora-en-pure---do-no-more-01",
+    "title": "Nora En Pure - Do No More [01]",
+    "artist": "Nora En Pure",
+    "song": "Do No More",
+    "session": 60,
+    "date": "2026-07-12",
+    "audio": "audio/nora-en-pure---do-no-more-01.mp3",
+    "picture": "pictures/nora-en-pure---do-no-more-01.png",
+    "duration": 93.5,
+    "size": 2873046
+  },
+  {
     "id": "carlo5---sommersemester-10",
     "title": "Carlo5 - Sommersemester [10]",
     "artist": "Carlo5",
