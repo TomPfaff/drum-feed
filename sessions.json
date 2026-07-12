@@ -1,5 +1,17 @@
 [
   {
+    "id": "carlo5---sommersemester-10",
+    "title": "Carlo5 - Sommersemester [10]",
+    "artist": "Carlo5",
+    "song": "Sommersemester",
+    "session": 60,
+    "date": "2026-07-12",
+    "audio": "audio/carlo5---sommersemester-10.mp3",
+    "picture": "pictures/carlo5---sommersemester-10.png",
+    "duration": 137.5,
+    "size": 5146431
+  },
+  {
     "id": "ciara-blue---you-feel-like-light-12",
     "title": "Ciara Blue - You Feel Like Light [12]",
     "artist": "Ciara Blue",
