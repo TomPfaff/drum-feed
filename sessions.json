@@ -1,5 +1,17 @@
 [
   {
+    "id": "sworn---keep-going-02",
+    "title": "Sworn - Keep Going [02]",
+    "artist": "Sworn",
+    "song": "Keep Going",
+    "session": 60,
+    "date": "2026-07-12",
+    "audio": "audio/sworn---keep-going-02.mp3",
+    "picture": "pictures/sworn---keep-going-02.png",
+    "duration": 137.5,
+    "size": 4811867
+  },
+  {
     "id": "mac-miller---bde-bonus-08",
     "title": "Mac Miller - BDE Bonus [08]",
     "artist": "Mac Miller",
