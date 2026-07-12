@@ -1,5 +1,17 @@
 [
   {
+    "id": "mac-miller---bde-bonus-08",
+    "title": "Mac Miller - BDE Bonus [08]",
+    "artist": "Mac Miller",
+    "song": "BDE Bonus",
+    "session": 60,
+    "date": "2026-07-12",
+    "audio": "audio/mac-miller---bde-bonus-08.mp3",
+    "picture": "pictures/mac-miller---bde-bonus-08.png",
+    "duration": 187.5,
+    "size": 5207960
+  },
+  {
     "id": "nora-en-pure---do-no-more-01",
     "title": "Nora En Pure - Do No More [01]",
     "artist": "Nora En Pure",
