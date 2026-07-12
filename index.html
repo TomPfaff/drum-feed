@@ -661,7 +661,10 @@ function openDetail(session, tile) {
   state.current = session;
   $("d-pic").src = session.picture;
   $("d-title").textContent = session.song || session.title;
-  $("d-date").textContent = (session.artist ? session.artist + " · " : "") + fmtDate(session.date);
+  $("d-date").textContent =
+    (session.artist ? session.artist + " · " : "")
+    + fmtDate(session.date)
+    + " · Session " + (session.session ?? "?");
   renderReactions();
   $("tl-played").style.width = "0%";
   $("c-at").textContent = "0:00";
@@ -718,7 +721,7 @@ function renderGrid(list) {
 function applyFilter() {
   const query = filter.q.toLowerCase();
   const filtered = state.sessions.filter(session => {
-    const haystack = `${session.artist || ""} ${session.song || ""} ${session.title || ""}`.toLowerCase();
+    const haystack = `${session.artist || ""} ${session.song || ""} ${session.title || ""} session ${session.session ?? ""}`.toLowerCase();
     if (query && !haystack.includes(query)) return false;
     const r = reactionsFor(session.id);
     if (filter.liked && !r.liked) return false;

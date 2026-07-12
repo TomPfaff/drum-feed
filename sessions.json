@@ -8,7 +8,8 @@
     "audio": "audio/keeno-sam-welch-noppo---the-simple-life-01.mp3",
     "picture": "pictures/keeno-sam-welch-noppo---the-simple-life-01.png",
     "duration": 193.5,
-    "size": 5538520
+    "size": 5538520,
+    "session": null
   },
   {
     "id": "jonah-zed---lovegoneby-07",
@@ -19,7 +20,8 @@
     "audio": "audio/jonah-zed---lovegoneby-07.mp3",
     "picture": "pictures/jonah-zed---lovegoneby-07.png",
     "duration": 175.1,
-    "size": 5711692
+    "size": 5711692,
+    "session": null
   },
   {
     "id": "anderson-paak---come-down-11",
@@ -30,7 +32,8 @@
     "audio": "audio/anderson-paak---come-down-11.mp3",
     "picture": "pictures/anderson-paak---come-down-11.png",
     "duration": 175.1,
-    "size": 5716504
+    "size": 5716504,
+    "session": null
   },
   {
     "id": "sir---rapper-weed-feat-boogie-08",
@@ -41,7 +44,8 @@
     "audio": "audio/sir---rapper-weed-feat-boogie-08.mp3",
     "picture": "pictures/sir---rapper-weed-feat-boogie-08.png",
     "duration": 150.1,
-    "size": 4438202
+    "size": 4438202,
+    "session": null
   },
   {
     "id": "logic---man-i-is-09",
@@ -52,7 +56,8 @@
     "audio": "audio/logic---man-i-is-09.mp3",
     "picture": "pictures/logic---man-i-is-09.png",
     "duration": 243.0,
-    "size": 6653037
+    "size": 6653037,
+    "session": null
   },
   {
     "id": "mac-miller---good-news-06",
@@ -63,7 +68,8 @@
     "audio": "audio/mac-miller---good-news-06.mp3",
     "picture": "pictures/mac-miller---good-news-06.png",
     "duration": 223.5,
-    "size": 6013198
+    "size": 6013198,
+    "session": null
   },
   {
     "id": "big-k-r-i-t---big-bank-feat-t-i-04",
@@ -74,7 +80,8 @@
     "audio": "audio/big-k-r-i-t---big-bank-feat-t-i-04.mp3",
     "picture": "pictures/big-k-r-i-t---big-bank-feat-t-i-04.png",
     "duration": 200.1,
-    "size": 5031411
+    "size": 5031411,
+    "session": null
   },
   {
     "id": "francis-and-the-lights---friends-feat-bon-iver-11",
@@ -85,7 +92,8 @@
     "audio": "audio/francis-and-the-lights---friends-feat-bon-iver-11.mp3",
     "picture": "pictures/francis-and-the-lights---friends-feat-bon-iver-11.png",
     "duration": 175.1,
-    "size": 5527036
+    "size": 5527036,
+    "session": null
   },
   {
     "id": "chance-the-rapper---summer-friends-feat-jeremih-francis-the-lights-07",
@@ -96,7 +104,8 @@
     "audio": "audio/chance-the-rapper---summer-friends-feat-jeremih-francis-the-lights-07.mp3",
     "picture": "pictures/chance-the-rapper---summer-friends-feat-jeremih-francis-the-lights-07.png",
     "duration": 282.2,
-    "size": 7318027
+    "size": 7318027,
+    "session": null
   },
   {
     "id": "owl-city---fireflies-05",
@@ -107,7 +116,8 @@
     "duration": 204.7,
     "size": 5861870,
     "artist": "Owl City",
-    "song": "Fireflies"
+    "song": "Fireflies",
+    "session": null
   },
   {
     "id": "mac-miller---woods-07",
@@ -118,7 +128,8 @@
     "duration": 275.0,
     "size": 7067779,
     "artist": "Mac Miller",
-    "song": "Woods"
+    "song": "Woods",
+    "session": null
   },
   {
     "id": "free-nationals-mac-miller-kali-uchis---time-12",
@@ -129,7 +140,8 @@
     "duration": 152.5,
     "size": 4133975,
     "artist": "Free Nationals, Mac Miller & Kali Uchis",
-    "song": "Time"
+    "song": "Time",
+    "session": null
   },
   {
     "id": "logic---man-i-is-01",
@@ -140,7 +152,8 @@
     "duration": 180.9,
     "size": 5488213,
     "artist": "Logic",
-    "song": "man i is"
+    "song": "man i is",
+    "session": null
   },
   {
     "id": "mac-miller---objects-in-the-mirror-09",
@@ -151,7 +164,8 @@
     "duration": 225.0,
     "size": 5746120,
     "artist": "Mac Miller",
-    "song": "Objects in the Mirror"
+    "song": "Objects in the Mirror",
+    "session": null
   },
   {
     "id": "demo-smells-like",
@@ -162,7 +176,8 @@
     "duration": 4.0,
     "size": 136414,
     "artist": "Demo",
-    "song": "Smells Like Teen Spirit"
+    "song": "Smells Like Teen Spirit",
+    "session": null
   },
   {
     "id": "demo-uptown-funk",
@@ -173,6 +188,7 @@
     "duration": 4.0,
     "size": 140943,
     "artist": "Demo",
-    "song": "Uptown Funk"
+    "song": "Uptown Funk",
+    "session": null
   }
 ]
