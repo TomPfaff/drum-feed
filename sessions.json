@@ -1,5 +1,17 @@
 [
   {
+    "id": "cro---steht-mir-10",
+    "title": "Cro - Steht Mir [10]",
+    "artist": "Cro",
+    "song": "Steht Mir",
+    "session": 62,
+    "date": "2026-07-14",
+    "audio": "audio/cro---steht-mir-10.mp3",
+    "picture": "pictures/cro---steht-mir-10.png",
+    "duration": 175.1,
+    "size": 5022800
+  },
+  {
     "id": "mos-def---mathematics-03",
     "title": "Mos Def - Mathematics [03]",
     "artist": "Mos Def",
