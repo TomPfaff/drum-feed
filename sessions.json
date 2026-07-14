@@ -1,5 +1,17 @@
 [
   {
+    "id": "keanler---sunrise-06",
+    "title": "Keanler - Sunrise [06]",
+    "artist": "Keanler",
+    "song": "Sunrise",
+    "session": 63,
+    "date": "2026-07-14",
+    "audio": "audio/keanler---sunrise-06.mp3",
+    "picture": "pictures/keanler---sunrise-06.png",
+    "duration": 168.5,
+    "size": 5659055
+  },
+  {
     "id": "sir---the-recipe-03",
     "title": "SiR - The Recipe [03]",
     "artist": "SiR",
