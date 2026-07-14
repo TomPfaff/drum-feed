@@ -1,5 +1,17 @@
 [
   {
+    "id": "mos-def---mathematics-02",
+    "title": "Mos Def - Mathematics [02]",
+    "artist": "Mos Def",
+    "song": "Mathematics",
+    "session": 63,
+    "date": "2026-07-14",
+    "audio": "audio/mos-def---mathematics-02.mp3",
+    "picture": "pictures/mos-def---mathematics-02.png",
+    "duration": 246.4,
+    "size": 6224042
+  },
+  {
     "id": "mac-miller---woods-12",
     "title": "Mac Miller - Woods [12]",
     "artist": "Mac Miller",
