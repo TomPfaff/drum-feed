@@ -201,8 +201,13 @@
   "leony-g-eazy---rock-n-roll-02": {
     "liked": false,
     "tags": [
-      "yellow",
       "red"
+    ]
+  },
+  "chance-the-rapper---summer-friends-feat-jeremih-francis-the-lights-13": {
+    "liked": false,
+    "tags": [
+      "yellow"
     ]
   }
 }
