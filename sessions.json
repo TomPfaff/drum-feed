@@ -1,5 +1,17 @@
 [
   {
+    "id": "sir---the-recipe-03",
+    "title": "SiR - The Recipe [03]",
+    "artist": "SiR",
+    "song": "The Recipe",
+    "session": 63,
+    "date": "2026-07-14",
+    "audio": "audio/sir---the-recipe-03.mp3",
+    "picture": "pictures/sir---the-recipe-03.png",
+    "duration": 172.0,
+    "size": 5124358
+  },
+  {
     "id": "payroll-giovanni-cardo---5-s-and-6-s-05",
     "title": "Payroll Giovanni & Cardo - 5's and 6's [05]",
     "artist": "Payroll Giovanni & Cardo",
