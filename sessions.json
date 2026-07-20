@@ -1,5 +1,17 @@
 [
   {
+    "id": "kendrick-lamar---i-05",
+    "title": "Kendrick Lamar - i [05]",
+    "artist": "Kendrick Lamar",
+    "song": "i",
+    "session": 64,
+    "date": "2026-07-20",
+    "audio": "audio/kendrick-lamar---i-05.mp3",
+    "picture": "pictures/kendrick-lamar---i-05.png",
+    "duration": 221.7,
+    "size": 6171426
+  },
+  {
     "id": "logic---man-i-is-11",
     "title": "Logic - man i is [11]",
     "artist": "Logic",
