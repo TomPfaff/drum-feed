@@ -1,5 +1,17 @@
 [
   {
+    "id": "macklemore---marmalade-feat-lil-yachty-07-2",
+    "title": "Macklemore - Marmalade (feat. Lil Yachty) [07]",
+    "artist": "Macklemore",
+    "song": "Marmalade (feat. Lil Yachty)",
+    "session": 64,
+    "date": "2026-07-20",
+    "audio": "audio/macklemore---marmalade-feat-lil-yachty-07-2.mp3",
+    "picture": "pictures/macklemore---marmalade-feat-lil-yachty-07-2.png",
+    "duration": 250.0,
+    "size": 7253435
+  },
+  {
     "id": "polar-inc---journal-01",
     "title": "Polar Inc. - Journal [01]",
     "artist": "Polar Inc.",
