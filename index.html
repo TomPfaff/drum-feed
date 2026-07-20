@@ -280,6 +280,13 @@
     visibility: hidden;
   }
   .comment:hover .del { visibility: visible; }
+  .comment .back5 {
+    background: none; border: 1px solid #35353d; border-radius: 10px;
+    color: var(--muted); cursor: pointer;
+    font-size: 10.5px; padding: 1px 6px; flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .comment .back5:hover { color: var(--accent); border-color: var(--accent); }
 
   #c-form { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
   #c-at {
@@ -533,11 +540,18 @@ function renderComments() {
     const row = document.createElement("div");
     row.className = "comment";
     row.dataset.t = c.t;
-    row.innerHTML = `<span class="ct"></span><span class="cx"></span><span class="cd"></span><button class="del" title="Loeschen">&times;</button>`;
+    row.innerHTML = `<span class="ct"></span><span class="cx"></span><button class="back5" title="Zeitstempel 5s frueher">&minus;5s</button><span class="cd"></span><button class="del" title="Loeschen">&times;</button>`;
     row.querySelector(".ct").textContent = fmtTime(c.t);
     row.querySelector(".cx").textContent = c.text;
     row.querySelector(".cd").textContent = fmtDate(c.date);
     row.addEventListener("click", () => { audio.currentTime = c.t; audio.play().catch(() => {}); });
+    row.querySelector(".back5").addEventListener("click", (e) => {
+      e.stopPropagation();
+      c.t = Math.max(0, Math.round((c.t - 5) * 10) / 10);
+      localStorage.setItem("df_comments", JSON.stringify(state.local));
+      renderComments(); renderMarkers();
+      if (ghConfig()) pushJsonToGitHub("comments.json", allMerged());
+    });
     row.querySelector(".del").addEventListener("click", (e) => {
       e.stopPropagation();
       if (!confirm("Kommentar loeschen?")) return;
