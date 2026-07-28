@@ -1,5 +1,17 @@
 [
   {
+    "id": "the-weeknd---blinding-lights-01",
+    "title": "The Weeknd - Blinding Lights [01]",
+    "artist": "The Weeknd",
+    "song": "Blinding Lights",
+    "session": 101,
+    "date": "2026-07-28",
+    "audio": "audio/the-weeknd---blinding-lights-01.mp3",
+    "picture": "pictures/the-weeknd---blinding-lights-01.png",
+    "duration": 368.5,
+    "size": 8929141
+  },
+  {
     "id": "doechii---denial-is-a-river-05-2",
     "title": "Doechii - DENIAL IS A RIVER [05]",
     "artist": "Doechii",
