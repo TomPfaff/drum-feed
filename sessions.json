@@ -1,5 +1,17 @@
 [
   {
+    "id": "the-weeknd---blinding-lights-02",
+    "title": "The Weeknd - Blinding Lights [02]",
+    "artist": "The Weeknd",
+    "song": "Blinding Lights",
+    "session": 2,
+    "date": "2026-07-30",
+    "audio": "audio/the-weeknd---blinding-lights-02.mp3",
+    "picture": "pictures/the-weeknd---blinding-lights-02.png",
+    "duration": 188.8,
+    "size": 4882339
+  },
+  {
     "id": "kid-cudi---the-prayer-08",
     "title": "Kid Cudi - The Prayer [08]",
     "artist": "Kid Cudi",
