@@ -1,5 +1,17 @@
 [
   {
+    "id": "tomas-skyldeberg---as-the-sun-goes-down-08",
+    "title": "Tomas Skyldeberg - As the Sun Goes Down [08]",
+    "artist": "Tomas Skyldeberg",
+    "song": "As the Sun Goes Down",
+    "session": 102,
+    "date": "2026-07-31",
+    "audio": "audio/tomas-skyldeberg---as-the-sun-goes-down-08.mp3",
+    "picture": "pictures/tomas-skyldeberg---as-the-sun-goes-down-08.png",
+    "duration": 25.1,
+    "size": 1122753
+  },
+  {
     "id": "takeoff---casper-01",
     "title": "Takeoff - Casper [01]",
     "artist": "Takeoff",
