@@ -1,5 +1,17 @@
 [
   {
+    "id": "ariana-grande---the-way-feat-mac-miller-02",
+    "title": "Ariana Grande - The Way (feat. Mac Miller) [02]",
+    "artist": "Ariana Grande",
+    "song": "The Way (feat. Mac Miller)",
+    "session": null,
+    "date": "2026-08-02",
+    "audio": "audio/ariana-grande---the-way-feat-mac-miller-02.mp3",
+    "picture": "pictures/ariana-grande---the-way-feat-mac-miller-02.png",
+    "duration": 231.0,
+    "size": 5655111
+  },
+  {
     "id": "tomas-skyldeberg---as-the-sun-goes-down-08",
     "title": "Tomas Skyldeberg - As the Sun Goes Down [08]",
     "artist": "Tomas Skyldeberg",
