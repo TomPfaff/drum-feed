@@ -1,5 +1,17 @@
 [
   {
+    "id": "ariana-grande---the-way-feat-mac-miller-13",
+    "title": "Ariana Grande - The Way (feat. Mac Miller) [13]",
+    "artist": "Ariana Grande",
+    "song": "The Way (feat. Mac Miller)",
+    "session": 103,
+    "date": "2026-08-02",
+    "audio": "audio/ariana-grande---the-way-feat-mac-miller-13.mp3",
+    "picture": "pictures/ariana-grande---the-way-feat-mac-miller-13.png",
+    "duration": 219.6,
+    "size": 5978690
+  },
+  {
     "id": "dominic-fike---bodies-11",
     "title": "Dominic Fike - Bodies [11]",
     "artist": "Dominic Fike",
