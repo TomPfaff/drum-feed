@@ -1,0 +1,25 @@
+{
+  "current": "founders-era",
+  "limit": 1073741824,
+  "eras": [
+    {
+      "name": "founders-era",
+      "count": 91,
+      "from": "2026-07-05",
+      "to": "2026-08-03",
+      "sessions": [
+        2,
+        104
+      ],
+      "size": 531200188
+    },
+    {
+      "name": "Test Era",
+      "count": 0,
+      "from": null,
+      "to": null,
+      "sessions": null,
+      "size": 0
+    }
+  ]
+}

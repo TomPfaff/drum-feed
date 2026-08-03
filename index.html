@@ -176,6 +176,21 @@
   }
 
   /* filter bar */
+  #era-bar {
+    max-width: 935px;
+    margin: 14px auto 0;
+    padding: 0 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #era-pick {
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--line); border-radius: 18px;
+    padding: 7px 12px; font-size: 13.5px; font-weight: 600;
+    outline: none; cursor: pointer; max-width: 60%;
+  }
+  #era-pick:focus { border-color: var(--accent); }
+  #era-info { color: var(--muted); font-size: 12.5px; }
+
   #filter {
     max-width: 935px;
     margin: 12px auto 2px;
@@ -328,6 +343,11 @@
   <div id="cal-wrap"><div id="cal"></div></div>
 </section>
 
+<div id="era-bar" hidden>
+  <select id="era-pick" title="Era wählen"></select>
+  <span id="era-info"></span>
+</div>
+
 <div id="filter" hidden>
   <input id="f-search" type="search" placeholder="Artist oder Song suchen..." autocomplete="off">
   <button id="f-like" title="Nur Likes zeigen">&#9829;</button>
@@ -387,6 +407,9 @@ const state = {
   reactionsLocal: JSON.parse(localStorage.getItem("df_reactions") || "{}"),
   tiles: {},                                                        // session id -> tile element
   current: null,                                                    // session shown in detail
+  eras: [],                                                         // from eras.json
+  era: null,                                                        // name of the era on screen
+  limit: 0,                                                         // max bytes per era
 };
 
 function ghConfig() { return JSON.parse(localStorage.getItem("df_github") || "null"); }
@@ -616,7 +639,8 @@ function fmtSize(bytes) {
 
 function renderStats(sessions) {
   $("stats").hidden = false;
-  const LIMIT = 1024 * 1048576;  // GitHub Pages: 1 GB
+  // Grenze je Era — kommt aus eras.json, damit Skripte und Seite dieselbe kennen.
+  const LIMIT = state.limit || 1024 * 1048576;  // GitHub Pages: 1 GB
   const totalSize = sessions.reduce((a, s) => a + (s.size || 0), 0);
   const totalDur = sessions.reduce((a, s) => a + (s.duration || 0), 0);
   $("s-count").textContent = sessions.length;
@@ -673,7 +697,7 @@ function renderCalendar(sessions) {
 // ---------- detail view ----------
 function openDetail(session, tile) {
   state.current = session;
-  $("d-pic").src = session.picture;
+  $("d-pic").src = encodePath(session.picture || "");
   $("d-title").textContent = session.song || session.title;
   $("d-date").textContent =
     (session.artist ? session.artist + " · " : "")
@@ -683,7 +707,7 @@ function openDetail(session, tile) {
   $("tl-played").style.width = "0%";
   $("c-at").textContent = "0:00";
   $("sync-note").textContent = ghConfig() ? "" : "Kommentare: nur dieses Geraet (Sync via ⚙).";
-  audio.src = session.audio;
+  audio.src = encodePath(session.audio || "");
   renderComments(); renderMarkers();
   detail.classList.add("open");
   audio.play().catch(() => {});
@@ -716,7 +740,7 @@ function renderGrid(list) {
     const tile = document.createElement("button");
     tile.className = "tile";
     tile.innerHTML = `
-      <img src="${session.picture}" alt="" decoding="async">
+      <img src="${encodePath(session.picture || "")}" alt="" decoding="async">
       <div class="overlay">
         <div class="t"></div>
         <div class="d"></div>
@@ -768,20 +792,80 @@ document.querySelectorAll("#filter .f-tags .tag").forEach(button => {
   });
 });
 
+// ---------- eras ----------
+// Eine Era ist ein Ordner unter eras/. Welche es gibt, steht in eras.json —
+// der Browser kann Ordner nicht selbst auflisten, darum schreibt refresh_eras.py
+// dieses Verzeichnis. Ordner umbenennen + refresh = Era umbenannt.
+const LAST_ERA_KEY = "drumfeed.era";
+
+// Pfade koennen Leerzeichen enthalten ("eras/Sommer 2026/audio/x.mp3"),
+// deshalb jedes Segment einzeln kodieren — "/" muss "/" bleiben.
+function encodePath(path) {
+  return path.split("/").map(encodeURIComponent).join("/");
+}
+
+function eraLabel(era) {
+  const span = era.from && era.to && era.from.slice(0, 4) !== era.to.slice(0, 4)
+    ? `${era.from.slice(0, 4)}–${era.to.slice(0, 4)}` : (era.to || "").slice(0, 4);
+  return `${era.name}${span ? "  ·  " + span : ""}  (${era.count})`;
+}
+
+async function loadEra(name) {
+  const era = state.eras.find(e => e.name === name) || state.eras[0];
+  if (!era) { $("empty").hidden = false; return; }
+  state.era = era.name;
+  try { localStorage.setItem(LAST_ERA_KEY, era.name); } catch (_) {}
+
+  const posts = await fetch(`${encodePath("eras/" + era.name + "/era.json")}?${Date.now()}`)
+    .then(r => r.ok ? r.json() : []).catch(() => []);
+  posts.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  state.sessions = posts;
+
+  $("era-info").textContent = era.sessions
+    ? `Session ${era.sessions[0]}–${era.sessions[1]}  ·  ${fmtSize(era.size)}`
+    : fmtSize(era.size);
+  $("empty").hidden = posts.length > 0;
+  $("filter").hidden = posts.length === 0;
+  if (posts.length) renderStats(posts);
+  $("stats").hidden = posts.length === 0;
+  applyFilter();
+}
+
 // ---------- load feed ----------
 Promise.all([
-  fetch("sessions.json?" + Date.now()).then(r => r.json()),
+  fetch("eras.json?" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null),
   fetch("comments.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
   fetch("reactions.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-]).then(([sessions, published, reactionsPub]) => {
-  state.sessions = sessions;
+]).then(async ([index, published, reactionsPub]) => {
   state.published = published;
   state.reactionsPub = reactionsPub;
-  sessions.sort((a, b) => b.date.localeCompare(a.date));
-  if (!sessions.length) { $("empty").hidden = false; return; }
-  renderStats(sessions);
-  $("filter").hidden = false;
-  applyFilter();
+  state.eras = (index && index.eras) || [];
+  state.limit = (index && index.limit) || 0;
+
+  if (!state.eras.length) { $("empty").hidden = false; return; }
+
+  const picker = $("era-pick");
+  picker.innerHTML = "";
+  for (const era of state.eras) {
+    const option = document.createElement("option");
+    option.value = era.name;
+    option.textContent = eraLabel(era);
+    picker.appendChild(option);
+  }
+  // Zuletzt gewaehlte Era merken — aber nie auf einer leeren Era landen,
+  // sonst startet der Feed ohne sichtbaren Grund leer.
+  let start = null;
+  try { start = localStorage.getItem(LAST_ERA_KEY); } catch (_) {}
+  if (!state.eras.some(e => e.name === start && e.count > 0)) {
+    const fallback = state.eras.find(e => e.name === index.current && e.count > 0)
+      || state.eras.find(e => e.count > 0) || state.eras[0];
+    start = fallback.name;
+  }
+  picker.value = start;
+  $("era-bar").hidden = state.eras.length === 0;
+  picker.addEventListener("change", () => loadEra(picker.value));
+
+  await loadEra(start);
 }).catch(() => { $("empty").hidden = false; });
 </script>
 </body>
