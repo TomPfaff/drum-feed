@@ -158,7 +158,7 @@
   "disco-lines-tinashe---no-broke-boys-21": {
     "liked": false,
     "tags": [
-      "green"
+      "blue"
     ]
   },
   "buddy---hollyhood-feat-kent-jamz-19": {
@@ -488,5 +488,9 @@
     "tags": [
       "green"
     ]
+  },
+  "ariana-grande---the-way-feat-mac-miller-01": {
+    "liked": true,
+    "tags": []
   }
 }
