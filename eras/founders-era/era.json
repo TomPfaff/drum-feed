@@ -1,5 +1,17 @@
 [
   {
+    "id": "sabrina-carpenter---bed-chem-02",
+    "title": "Sabrina Carpenter - Bed Chem [02]",
+    "artist": "Sabrina Carpenter",
+    "song": "Bed Chem",
+    "session": 105,
+    "date": "2026-08-06",
+    "audio": "eras/founders-era/audio/sabrina-carpenter---bed-chem-02.mp3",
+    "picture": "eras/founders-era/pictures/sabrina-carpenter---bed-chem-02.png",
+    "duration": 268.2,
+    "size": 7139939
+  },
+  {
     "id": "mac-miller---thoughts-from-a-balcony-02",
     "title": "Mac Miller - Thoughts from a Balcony [02]",
     "artist": "Mac Miller",
