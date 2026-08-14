@@ -1,5 +1,17 @@
 [
   {
+    "id": "fwd_slash---aural-therapy-01",
+    "title": "fwd_slash - Aural Therapy [01]",
+    "artist": "fwd_slash",
+    "song": "Aural Therapy",
+    "session": 109,
+    "date": "2026-08-14",
+    "audio": "eras/founders-era/audio/fwd_slash---aural-therapy-01.mp3",
+    "picture": "eras/founders-era/pictures/fwd_slash---aural-therapy-01.png",
+    "duration": 156.0,
+    "size": 4878684
+  },
+  {
     "id": "logic---man-i-is-05",
     "title": "Logic - man i is [05]",
     "artist": "Logic",
