@@ -4,14 +4,14 @@
   "eras": [
     {
       "name": "founders-era",
-      "count": 116,
+      "count": 117,
       "from": "2026-07-05",
-      "to": "2026-08-14",
+      "to": "2026-08-19",
       "sessions": [
         2,
-        109
+        110
       ],
-      "size": 679962876
+      "size": 683629183
     },
     {
       "name": "Test Era",
