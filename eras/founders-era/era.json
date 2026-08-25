@@ -1,5 +1,17 @@
 [
   {
+    "id": "sir---john-redcorn-01",
+    "title": "SiR - John Redcorn [01]",
+    "artist": "SiR",
+    "song": "John Redcorn",
+    "session": 111,
+    "date": "2026-08-25",
+    "audio": "eras/founders-era/audio/sir---john-redcorn-01.mp3",
+    "picture": "eras/founders-era/pictures/sir---john-redcorn-01.png",
+    "duration": 193.5,
+    "size": 5546280
+  },
+  {
     "id": "drake---passionfruit-05",
     "title": "Drake - Passionfruit [05]",
     "artist": "Drake",
