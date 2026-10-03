@@ -1,5 +1,17 @@
 [
   {
+    "id": "sir---john-redcorn-09",
+    "title": "SiR - John Redcorn [09]",
+    "artist": "SiR",
+    "song": "John Redcorn",
+    "session": 112,
+    "date": "2026-10-03",
+    "audio": "eras/founders-era/audio/sir---john-redcorn-09.mp3",
+    "picture": "eras/founders-era/pictures/sir---john-redcorn-09.png",
+    "duration": 193.5,
+    "size": 5461127
+  },
+  {
     "id": "dominic-fike---bodies-08",
     "title": "Dominic Fike - Bodies [08]",
     "artist": "Dominic Fike",
