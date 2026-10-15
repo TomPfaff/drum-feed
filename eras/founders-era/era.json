@@ -1,5 +1,17 @@
 [
   {
+    "id": "sir---d-evils-03",
+    "title": "SiR - D'Evils [03]",
+    "artist": "SiR",
+    "song": "D'Evils",
+    "session": 113,
+    "date": "2026-10-15",
+    "audio": "eras/founders-era/audio/sir---d-evils-03.mp3",
+    "picture": "eras/founders-era/pictures/sir---d-evils-03.png",
+    "duration": 112.5,
+    "size": 3459759
+  },
+  {
     "id": "takeoff---casper-11",
     "title": "Takeoff - Casper [11]",
     "artist": "Takeoff",
